@@ -1,4 +1,4 @@
-unit in0k_lazIdeSRC_SourceEditorWindow_onActivate;
+unit in0k_lazIdeSRC_SourceEditor_onActivate;
 
 {$mode objfpc}{$H+}
 
@@ -44,7 +44,6 @@ type
     procedure   LazarusIDE_Clean;
   end;
 
-
 implementation
 
 constructor tIn0k_lazIdeSRC_SourceEditor_onActivate.Create;
@@ -52,6 +51,7 @@ begin
    _onEvent_:=nil;
    _ide_object_ESE_:=nil;
    _ide_object_WSE_:=nil;
+   _ide_object_WSE_onDeactivate_original:=nil;
 end;
 
 //------------------------------------------------------------------------------
