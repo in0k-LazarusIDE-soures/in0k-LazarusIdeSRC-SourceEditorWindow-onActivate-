@@ -2,6 +2,11 @@ unit in0k_lazIdeSRC_SourceEditor_onActivate;
 
 {$mode objfpc}{$H+}
 
+// уходим от подхода DEBUG .. используем для "прямой отладки"
+// http://wiki.freepascal.org/Extending_the_IDE#Debugging_the_IDE
+
+{todo: разобраться в выскакивающей подсказкой, генерит сообщение, это плохо наверно}
+
 interface
 
 uses SrcEditorIntf, //< you must use IDEIntf
@@ -11,9 +16,9 @@ type
 
  tIn0k_lazIdeSRC_SourceEditor_onActivate=class
   {%region --- onActivate EVENT ----------------------------------- /fold}
-  private
+  protected
   _onEvent_:TNotifyEvent;
-   procedure _do_onEvent_(const Sender:TObject);
+   procedure _do_onEvent_; virtual;
   {%endRegion}
   {%region --- Active Editor SourceEditor ------------------------- /fold}
   private //< текущий АКТИВНЫЙ редактор в окне (вкладка, таб)
@@ -38,6 +43,8 @@ type
   {%endRegion}
   public
     property    onEvent:TNotifyEvent read _onEvent_ write _onEvent_;
+    property    SourceEditorWindow:TSourceEditorWindowInterface read _ide_object_WSE_;
+    property    SourceEditor      :TSourceEditorInterface read _ide_object_ESE_;
   public
     constructor Create;
     procedure   LazarusIDE_SetUP;
@@ -47,7 +54,7 @@ type
 implementation
 
 constructor tIn0k_lazIdeSRC_SourceEditor_onActivate.Create;
-begin
+begin   //   debugln
    _onEvent_:=nil;
    _ide_object_ESE_:=nil;
    _ide_object_WSE_:=nil;
@@ -62,7 +69,7 @@ procedure tIn0k_lazIdeSRC_SourceEditor_onActivate._ESE_set_(const value:TSourceE
 begin
     if value<>_ide_object_ESE_ then begin
       _ide_object_ESE_:=value;
-      _do_onEvent_(_ide_object_ESE_);
+      _do_onEvent_;
     end
 end;
 
@@ -264,9 +271,9 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure tIn0k_lazIdeSRC_SourceEditor_onActivate._do_onEvent_(const Sender:TObject);
+procedure tIn0k_lazIdeSRC_SourceEditor_onActivate._do_onEvent_;
 begin
-    if Assigned(_onEvent_) then _onEvent_(Sender);
+    if Assigned(_onEvent_) then _onEvent_(SELF);
 end;
 
 //------------------------------------------------------------------------------
