@@ -12,7 +12,7 @@ interface
 {$ifDef In0k_lazIdeSRC_SourceEditor_onActivate_DebugLOG_mode}
     {$define _debugLOG_}
 {$endIf}
-{$define _debugLOG_}
+{.$define _debugLOG_}
 
 uses {$ifDef _debugLOG_}SysUtils,Dialogs,{$endIf}
     SrcEditorIntf, //< you must use IDEIntf
