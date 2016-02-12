@@ -34,7 +34,7 @@ interface
 //< "системе имен и папок" `in0k_LazExt_..`.
 
 uses {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate__DebugLOG_mode}in0k_lazExt_DEBUG,{$endIf}
-    SrcEditorIntf, //< you must use IDEIntf
+    SrcEditorIntf, //< you must use IDEIntf !!!
     Forms, Classes;
 
 type
