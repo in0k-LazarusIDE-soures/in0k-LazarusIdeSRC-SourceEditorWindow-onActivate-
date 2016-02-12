@@ -33,7 +33,6 @@ interface
 //< Можно смело убирать, так как будеть работать только в моей специальной
 //< "системе имен и папок" `in0k_LazExt_..`.
 
-
 uses {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate__DebugLOG_mode}in0k_lazExt_DEBUG,{$endIf}
     SrcEditorIntf, //< you must use IDEIntf
     Forms, Classes;
