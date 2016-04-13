@@ -14,7 +14,7 @@ interface
 // Режим логирования.
 //  В код включаются вызовы `DEBUG` с описанием текущих событий и состояний.
 //
-//{$define in0k_lazIdeSRC_SourceEditor_onActivate__DebugLOG_mode}
+//{$define in0k_lazIdeSRC_SourceEditor_onActivate___DebugLOG}
 //
 //------------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ interface
 //  Пользовательское событие `onEvent` вызывается ТОЛЬКО если редактор кода
 //  находится в фокусе (тоесть окно "Редактор Кода" АКТИВНО).
 //
-//{$define in0k_lazIdeSRC_SourceEditor_onActivate__inFocusONLY}
+//{$define in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
 //
 //------------------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ interface
 //< Можно смело убирать, так как будеть работать только в моей специальной
 //< "системе имен и папок" `in0k_LazExt_..`.
 
-uses {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate__DebugLOG_mode}in0k_lazExt_DEBUG,{$endIf}
+uses {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___DebugLOG}in0k_lazExt_DEBUG,{$endIf}
     SrcEditorIntf, //< you must use IDEIntf !!!
     Forms, Classes;
 
@@ -50,7 +50,7 @@ type
    _ide_object_ESE_:TSourceEditorInterface;
     procedure _ESE_set_(const value:TSourceEditorInterface);
   {%endRegion}
-  {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate__inFocusONLY}
+  {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
   {%region --- Active Window SourceEditor ------------------------- /fold}
   private //< текущee АКТИВНОЕ окно редактирования
    _ide_object_WSE_:TSourceEditorWindowInterface;
@@ -67,7 +67,7 @@ type
     procedure _ideEvent_SUMMARY;
   private //< обработка событий IDE Lazarus
     procedure _ideEvent_semEditorActivate({%H-}Sender:TObject);
-    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate__inFocusONLY}
+    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
     procedure _ideEvent_semWindowFocused (     Sender:TObject);
     {$endIf}
   {%endRegion}
@@ -84,7 +84,7 @@ type
 implementation
 
 {%region --- возня с ДЕБАГОМ -------------------------------------- /fold}
-{$if defined(in0k_lazIdeSRC_FuckUpForm__DebugLOG_mode) AND declared(in0k_lazIde_DEBUG)}
+{$if defined(in0k_lazIdeSRC_FuckUpForm___DebugLOG) AND declared(in0k_lazIde_DEBUG)}
     // `in0k_lazIde_DEBUG` - это функция ИНДИКАТОР что используется
     //                       моя "система имен и папок"
     {$define _debugLOG_}     //< типа да ... можно делать ДЕБАГ отметки
@@ -97,7 +97,7 @@ constructor tIn0k_lazIdeSRC_SourceEditor_onActivate.Create;
 begin
    _onEvent_:=nil;
    _ide_object_ESE_:=nil;
-    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate__inFocusONLY}
+    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
    _ide_object_WSE_:=nil;
    _ide_object_WSE_onDeactivate_original_:=nil;
     {$endIf}
@@ -164,7 +164,7 @@ begin
     DEBUG('ideEVENT:semEditorActivate','--->>>'+' sender'+addr2txt(Sender));
     {$endIf}
 
-    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate__inFocusONLY}
+    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
     // запускаемся только если окно редактирования в ФОКУСЕ
     if Assigned(_ide_object_WSE_) then _ideEvent_SUMMARY
     else begin
@@ -181,7 +181,7 @@ begin
     {$endIf}
 end;
 
-{$ifDef in0k_lazIdeSRC_SourceEditor_onActivate__inFocusONLY}
+{$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
 procedure tIn0k_lazIdeSRC_SourceEditor_onActivate._ideEvent_semWindowFocused(Sender:TObject);
 begin
     {$ifDEF _debugLOG_}
@@ -211,7 +211,7 @@ end;
 
 {%endRegion}
 
-{$ifDef in0k_lazIdeSRC_SourceEditor_onActivate__inFocusONLY}
+{$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
 {%region --- Active Window SourceEditor --------------------------- /fold}
 
 { ТЕКУЩЕЕ окно "Редактирования Исходного Кода"
@@ -332,7 +332,7 @@ end;
 procedure tIn0k_lazIdeSRC_SourceEditor_onActivate.LazarusIDE_SetUP;
 begin
     SourceEditorManagerIntf.RegisterChangeEvent(semEditorActivate, @_ideEvent_semEditorActivate);
-    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate__inFocusONLY}
+    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
     SourceEditorManagerIntf.RegisterChangeEvent(semWindowFocused,  @_ideEvent_semWindowFocused);
     {$endIf}
 end;
@@ -341,7 +341,7 @@ end;
 procedure tIn0k_lazIdeSRC_SourceEditor_onActivate.LazarusIDE_Clean;
 begin
     SourceEditorManagerIntf.UnRegisterChangeEvent(semEditorActivate, @_ideEvent_semEditorActivate);
-    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate__inFocusONLY}
+    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
     SourceEditorManagerIntf.UnRegisterChangeEvent(semWindowFocused,  @_ideEvent_semWindowFocused);
     {$endIf}
 end;
