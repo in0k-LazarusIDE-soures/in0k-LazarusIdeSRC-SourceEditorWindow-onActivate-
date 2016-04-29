@@ -50,7 +50,6 @@ type
    _ide_object_ESE_:TSourceEditorInterface;
     procedure _ESE_set_(const value:TSourceEditorInterface);
   {%endRegion}
-  {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
   {%region --- Active Window SourceEditor ------------------------- /fold}
   private //< текущee АКТИВНОЕ окно редактирования
    _ide_object_WSE_:TSourceEditorWindowInterface;
@@ -61,24 +60,20 @@ type
     procedure _WSE_rePlace_onDeactivate_(const wnd:tForm);
     procedure _WSE_reStore_onDeactivate_(const wnd:tForm);
   {%endRegion}
-  {$endIf}
   {%region --- IdeEVENT ------------------------------------------- /fold}
   private //< основное событие
     procedure _ideEvent_SUMMARY;
   private //< обработка событий IDE Lazarus
     procedure _ideEvent_semEditorActivate({%H-}Sender:TObject);
-    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
     procedure _ideEvent_semWindowFocused (     Sender:TObject);
-    {$endIf}
   {%endRegion}
   public
     property    onEvent:TNotifyEvent read _onEvent_ write _onEvent_;
-    //property    SourceEditorWindow:TSourceEditorWindowInterface read _ide_object_WSE_;
     property    SourceEditor      :TSourceEditorInterface read _ide_object_ESE_;
   public
     constructor Create;
-    procedure   LazarusIDE_SetUP; virtual;
-    procedure   LazarusIDE_Clean; virtual;
+    procedure   LazarusIDE_SetUP;
+    procedure   LazarusIDE_Clean;
   end;
 
 implementation
@@ -97,10 +92,8 @@ constructor tIn0k_lazIdeSRC_SourceEditor_onActivate.Create;
 begin
    _onEvent_:=nil;
    _ide_object_ESE_:=nil;
-    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
    _ide_object_WSE_:=nil;
    _ide_object_WSE_onDeactivate_original_:=nil;
-    {$endIf}
  end;
 
 //------------------------------------------------------------------------------
@@ -111,7 +104,7 @@ procedure tIn0k_lazIdeSRC_SourceEditor_onActivate._ESE_set_(const value:TSourceE
 begin
     if value<>_ide_object_ESE_ then begin
       _ide_object_ESE_:=value;
-      _do_onEvent_;
+       if Assigned(_ide_object_ESE_) then _do_onEvent_;
     end
 end;
 
@@ -181,7 +174,6 @@ begin
     {$endIf}
 end;
 
-{$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
 procedure tIn0k_lazIdeSRC_SourceEditor_onActivate._ideEvent_semWindowFocused(Sender:TObject);
 begin
     {$ifDEF _debugLOG_}
@@ -207,11 +199,9 @@ begin
     DEBUG('ideEVENT:semWindowFocused','---<<<');
     {$endIf}
 end;
-{$endIf}
 
 {%endRegion}
 
-{$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
 {%region --- Active Window SourceEditor --------------------------- /fold}
 
 { ТЕКУЩЕЕ окно "Редактирования Исходного Кода"
@@ -317,7 +307,6 @@ begin
 end;
 
 {%endRegion}
-{$endIf}
 
 //------------------------------------------------------------------------------
 
@@ -332,18 +321,14 @@ end;
 procedure tIn0k_lazIdeSRC_SourceEditor_onActivate.LazarusIDE_SetUP;
 begin
     SourceEditorManagerIntf.RegisterChangeEvent(semEditorActivate, @_ideEvent_semEditorActivate);
-    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
     SourceEditorManagerIntf.RegisterChangeEvent(semWindowFocused,  @_ideEvent_semWindowFocused);
-    {$endIf}
 end;
 
 // очистить наши настройки из LazarusIDE
 procedure tIn0k_lazIdeSRC_SourceEditor_onActivate.LazarusIDE_Clean;
 begin
     SourceEditorManagerIntf.UnRegisterChangeEvent(semEditorActivate, @_ideEvent_semEditorActivate);
-    {$ifDef in0k_lazIdeSRC_SourceEditor_onActivate___inFocusONLY}
     SourceEditorManagerIntf.UnRegisterChangeEvent(semWindowFocused,  @_ideEvent_semWindowFocused);
-    {$endIf}
 end;
 
 end.
